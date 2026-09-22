@@ -1,0 +1,17 @@
+[
+  { "rime": "eau", "niveau": 1, "mots": ["bateau", "chapeau", "gâteau", "château", "râteau", "oiseau", "cadeau", "manteau"] },
+  { "rime": "on", "niveau": 1, "mots": ["ballon", "mouton", "bonbon", "cochon", "citron", "crayon", "poisson", "maison"] },
+  { "rime": "ou", "niveau": 1, "mots": ["loup", "hibou", "bisou", "genou", "caillou", "chou", "kangourou"] },
+  { "rime": "a", "niveau": 1, "mots": ["chat", "rat", "chocolat", "avocat", "cinéma", "pyjama"] },
+  { "rime": "é", "niveau": 1, "mots": ["bébé", "café", "été", "épée", "fée", "poupée"] },
+  { "rime": "in", "niveau": 2, "mots": ["lapin", "sapin", "jardin", "moulin", "requin", "dauphin", "câlin", "matin"] },
+  { "rime": "ette", "niveau": 2, "mots": ["chaussette", "trottinette", "fourchette", "galette", "sucette", "poussette"] },
+  { "rime": "ille", "niveau": 2, "mots": ["fille", "bille", "chenille", "quille", "famille", "gorille"] },
+  { "rime": "ard", "niveau": 2, "mots": ["renard", "canard", "homard", "brouillard", "léopard", "bavard"] },
+  { "rime": "oir", "niveau": 2, "mots": ["miroir", "tiroir", "mouchoir", "arrosoir", "soir", "couloir"] },
+  { "rime": "age", "niveau": 3, "mots": ["fromage", "nuage", "plage", "cage", "image", "garage"] },
+  { "rime": "ure", "niveau": 3, "mots": ["voiture", "confiture", "ceinture", "peinture", "chaussure", "figure"] },
+  { "rime": "ise", "niveau": 3, "mots": ["cerise", "valise", "chemise", "église", "bêtise"] },
+  { "rime": "ouche", "niveau": 3, "mots": ["mouche", "bouche", "douche", "souche"] },
+  { "rime": "eur", "niveau": 3, "mots": ["fleur", "peur", "docteur", "facteur", "couleur", "chanteur"] }
+]
