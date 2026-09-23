@@ -1,6 +1,7 @@
 /**
  * Choix des questions : quel type d'exercice, puis quelle question.
  *
+ * - Chaque type a un poids de base (facultatif, 1 par défaut) : 2 = deux fois plus fréquent.
  * - Les types les plus ratés récemment reviennent un peu plus souvent.
  * - Dans un même bloc, un type déjà tiré devient beaucoup moins probable (variété).
  * - Jamais deux fois de suite le même type.
@@ -19,9 +20,10 @@ export function typesActifs(matiere) {
   return typesDe(matiere).filter((type) => etatType(type.id).actif);
 }
 
-function poidsEchec(type) {
+function poidsDuType(type) {
   const taux = tauxRecent(type.id);
-  return 1 + CONFIG.adaptatif.poidsEchec * (taux === null ? 0 : 1 - taux);
+  const bonusEchec = CONFIG.adaptatif.poidsEchec * (taux === null ? 0 : 1 - taux);
+  return (type.poids ?? 1) * (1 + bonusEchec);
 }
 
 function tirageAuPoids(elements, poids) {
@@ -47,7 +49,7 @@ export function creerTirage(matiere) {
     if (actifs.length === 0) throw new Error(`Aucun type actif en ${matiere}`);
     const candidats = actifs.length > 1 ? actifs.filter((t) => t !== precedent) : actifs;
 
-    const type = tirageAuPoids(candidats, (t) => poidsEchec(t) * FACTEUR_DEJA_TIRE ** (tirages.get(t) ?? 0));
+    const type = tirageAuPoids(candidats, (t) => poidsDuType(t) * FACTEUR_DEJA_TIRE ** (tirages.get(t) ?? 0));
     tirages.set(type, (tirages.get(type) ?? 0) + 1);
     precedent = type;
     return type;

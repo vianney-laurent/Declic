@@ -28,6 +28,7 @@ function prononcable(texte) {
     .replace(/\s\+\s/g, ' plus ')
     .replace(/\s[−-]\s/g, ' moins ')
     .replace(/\s=\s/g, ' égale ')
+    .replace(/\s×\s/g, ' fois ')
     .replace(/\s<\s/g, ' plus petit que ')
     .replace(/\s>\s/g, ' plus grand que ')
     .replace(/[«»·→_]/g, ' ');

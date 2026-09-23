@@ -15,6 +15,7 @@ export default {
   id: 'sons',
   matiere: 'francais',
   titre: 'Trouver le son',
+  poids: 0.6, // bien maîtrisé : revient moins souvent
   donnees: 'sons',
 
   generer({ niveau, donnees }) {

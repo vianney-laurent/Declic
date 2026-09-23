@@ -59,6 +59,17 @@ export function illustrerNombres(nombres, separateur) {
 }
 
 /**
+ * Visuel d'explication d'un calcul à deux nombres.
+ *   '+' : les deux nombres côte à côte
+ *   '−' : jusqu'à 20, des points dont on barre ceux qu'on enlève ; au-delà, les cubes du résultat
+ */
+export function illustrerCalcul(a, operateur, b) {
+  if (operateur === '+') return illustrerNombres([a, b], '+');
+  if (a <= 20) return { type: 'points', groupes: [{ n: a - b }, { n: b, style: 'barre' }], continu: true };
+  return { type: 'cubes', groupes: [a - b] };
+}
+
+/**
  * Nombres proches pour servir de pièges : ±1, ±2, ±10, chiffres inversés.
  * Seulement des nombres positifs et ≤ max.
  */

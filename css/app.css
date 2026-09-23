@@ -317,6 +317,19 @@ button {
   justify-content: center;
 }
 
+/* Toucher un mot : la phrase elle-même est au centre de l'écran. */
+.question--phrase {
+  grid-template-rows: auto 1fr;
+}
+
+.question--phrase .question__visuel {
+  display: none;
+}
+
+.question--phrase .question__reponse {
+  align-items: center;
+}
+
 /* Tablette à l'horizontale : le pavé numérique passe à droite. */
 @media (orientation: landscape) and (min-width: 900px) {
   .question--pave {
@@ -400,6 +413,53 @@ button {
 
 .option--estompee {
   opacity: 0.35;
+}
+
+.phrase-a-toucher {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 820px;
+}
+
+.mot-a-toucher {
+  min-height: var(--toucher);
+  padding: 0 22px;
+  border: 2px solid var(--bord);
+  border-radius: var(--rayon-petit);
+  background: var(--surface);
+  box-shadow: var(--ombre);
+  font-size: 40px;
+  font-weight: 700;
+  transition: transform var(--transition), background var(--transition), opacity var(--transition);
+}
+
+.mot-a-toucher:active:not(:disabled) {
+  transform: scale(0.96);
+  border-color: var(--accent);
+}
+
+.mot-a-toucher:disabled {
+  cursor: default;
+}
+
+.mot-a-toucher--juste {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  animation: rebond 480ms var(--transition);
+}
+
+.mot-a-toucher--bon {
+  border-color: var(--accent);
+  background: var(--accent-doux);
+  color: var(--accent-fonce);
+}
+
+.mot-a-toucher--choisi {
+  opacity: 0.55;
+  border-style: dashed;
 }
 
 .pave {
@@ -585,9 +645,25 @@ button {
   letter-spacing: 0.02em;
   text-align: center;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .mot mark {
+  background: var(--accent-doux);
+  color: var(--accent-fonce);
+  border-radius: 10px;
+  padding: 0 4px;
+}
+
+/* Phrase (problèmes, conjugaison) : plus petite qu'un mot seul, revient à la ligne. */
+.phrase {
+  max-width: 760px;
+  font-size: clamp(32px, 6vw, 42px);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.phrase mark {
   background: var(--accent-doux);
   color: var(--accent-fonce);
   border-radius: 10px;

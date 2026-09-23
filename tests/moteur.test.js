@@ -21,9 +21,16 @@ const repondre = (juste) => progression.enregistrerReponse('essai', { juste, que
 
 beforeEach(() => reinitialiserEtat());
 
-test('10 bonnes réponses sur 10 : niveau supérieur', () => {
-  for (let i = 0; i < 9; i++) assert.equal(repondre(true), 1);
+test('6 bonnes réponses d\'affilée : montée rapide', () => {
+  for (let i = 0; i < 5; i++) assert.equal(repondre(true), 1);
   assert.equal(repondre(true), 2);
+});
+
+test('80 % sur 10 réponses : niveau supérieur', () => {
+  repondre(false);
+  repondre(false);
+  for (let i = 0; i < 7; i++) assert.equal(repondre(true), 1);
+  assert.equal(repondre(true), 2); // 8/10
 });
 
 test('moins de 50 % sur 10 réponses : niveau inférieur', () => {

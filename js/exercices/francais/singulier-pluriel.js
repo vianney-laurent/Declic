@@ -4,7 +4,7 @@
  *   { "singulier": "le cheval", "pluriel": "les chevaux", "pieges": [...], "niveau": 3 }
  *
  * Deux formes d'exercice :
- * - « Un seul ou plusieurs ? » : on reconnaît le nombre grâce au petit mot (le / les…)
+ * - « Singulier ou pluriel ? » : on reconnaît le nombre grâce au petit mot (le / les…)
  * - « Et s'il y en a plusieurs ? » : on choisit la bonne écriture au pluriel
  */
 import { choisir, itemsDuNiveau, optionsAvec } from '../outils.js';
@@ -19,15 +19,17 @@ function reconnaitre(item) {
   const pluriel = Math.random() < 0.5;
   const texte = pluriel ? item.pluriel : item.singulier;
   const [determinant] = decouper(texte);
-  const attendu = pluriel ? 'plusieurs' : 'un seul';
+  const attendu = pluriel ? 'pluriel' : 'singulier';
 
   return {
-    consigne: 'Un seul ou plusieurs ?',
-    lecture: `Un seul ou plusieurs ? ${texte}.`,
+    consigne: 'Singulier ou pluriel ?',
+    lecture: `Singulier ou pluriel ? ${texte}.`,
     visuel: { type: 'mot', texte },
-    reponse: { mode: 'choix', options: ['un seul', 'plusieurs'], attendu },
+    reponse: { mode: 'choix', options: ['singulier', 'pluriel'], attendu },
     explication: {
-      texte: `« ${determinant} » : il y en a ${pluriel ? 'plusieurs' : 'un seul'}.`,
+      texte: pluriel
+        ? `« ${determinant} » : il y en a plusieurs, c'est le pluriel.`
+        : `« ${determinant} » : il y en a un seul, c'est le singulier.`,
       visuel: { type: 'mot', texte, surligne: determinant, position: 0 },
     },
     resume: texte,
@@ -41,8 +43,8 @@ function mettreAuPluriel(item) {
   const pieges = [`${detP} ${resteS}`, `${detS} ${resteP}`, naif, ...(item.pieges ?? [])];
 
   return {
-    consigne: "Et s'il y en a plusieurs ?",
-    lecture: `${item.singulier}. Et s'il y en a plusieurs ?`,
+    consigne: 'Mets au pluriel.',
+    lecture: `${item.singulier}. Mets au pluriel.`,
     visuel: { type: 'mot', texte: item.singulier },
     reponse: { mode: 'choix', options: optionsAvec(item.pluriel, pieges, 3), attendu: item.pluriel },
     explication: {

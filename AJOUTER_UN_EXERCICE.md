@@ -19,9 +19,11 @@ Les données sont dans `data/francais/`, un fichier par type :
 | `syllabes.json`            | `{ "mot": "tortue", "syllabes": ["tor", "tue"] }`                         |
 | `lettres-manquantes.json`  | `{ "trou": "p_mme", "lettre": "o", "pieges": ["a", "u"], "niveau": 1 }`   |
 | `dictee.json`              | `{ "mot": "girafe", "pieges": ["giraffe", "jirafe"], "niveau": 2 }`       |
-| `un-une.json`              | ajouter le mot dans la liste `un` ou `une` du bon niveau                  |
+| `genre-des-noms.json`      | ajouter le nom dans la liste `masculin` ou `feminin` du bon niveau        |
 | `singulier-pluriel.json`   | `{ "singulier": "le loup", "pluriel": "les loups", "niveau": 1 }`         |
 | `rimes.json`               | ajouter un mot dans une famille, ou une nouvelle famille                  |
+| `verbes.json`              | `{ "phrase": "Le lion rugit.", "verbe": "rugit", "infinitif": "rugir", "niveau": 1 }` |
+| `temps.json`               | `{ "phrase": "Hier, il a plu.", "temps": "passé", "indice": "Hier", "niveau": 1 }` |
 
 Règles simples :
 
@@ -29,6 +31,8 @@ Règles simples :
 - Les `pieges` sont les mauvaises réponses proposées : ils doivent être plausibles mais faux.
 - Syllabes : on découpe **à l'oral**. Mieux vaut éviter les mots terminés par un « e » muet (« lune » : 1 ou 2 ?).
 - Sons : un mot ne doit pas contenir le son d'une autre liste s'il risque de servir de piège ambigu. Le test vérifie que chaque mot contient bien une écriture de son son.
+- Verbes : une seule forme conjuguée par phrase (pas d'infinitif comme « aime jouer »), et le verbe ne doit apparaître qu'une fois.
+- Temps : `temps` vaut `passé`, `présent` ou `futur` ; `indice` est le passage de la phrase qui aide à trouver (il est surligné dans l'explication).
 
 ---
 
@@ -36,7 +40,7 @@ Règles simples :
 
 ### Étape 1 — créer le fichier
 
-Dans `js/exercices/maths/` ou `js/exercices/francais/`. Exemple complet, `js/exercices/maths/dizaines-unites.js` :
+Dans `js/exercices/maths/` ou `js/exercices/francais/`. Exemple complet, `js/exercices/maths/dizaines-exemple.js` :
 
 ```js
 /**
@@ -48,7 +52,7 @@ import { entier, nombresProches, optionsAvec } from '../outils.js';
 const MAX = { 1: 30, 2: 60, 3: 99 };
 
 export default {
-  id: 'dizaines-unites',        // unique, ne plus le changer ensuite (clé de sauvegarde)
+  id: 'dizaines-exemple',       // unique, ne plus le changer ensuite (clé de sauvegarde)
   matiere: 'maths',             // 'maths' ou 'francais'
   titre: 'Dizaines et unités',  // affiché dans l'espace parent
 
@@ -78,11 +82,11 @@ export default {
 Dans `js/exercices/registre.js`, ajouter l'import et l'entrée dans la liste `TYPES` :
 
 ```js
-import dizainesUnites from './maths/dizaines-unites.js';
+import dizainesExemple from './maths/dizaines-exemple.js';
 
 export const TYPES = [
   // …
-  dizainesUnites,
+  dizainesExemple,
 ];
 ```
 
@@ -101,6 +105,10 @@ npm start    # ouvre l'application sur http://localhost:8080
 
 **Ce que reçoit `generer`** : `{ niveau, donnees }`. `donnees` est le contenu du fichier JSON si le type déclare `donnees: 'nom-du-fichier'`.
 
+**Fréquence** : `poids: 2` fait revenir un type deux fois plus souvent (c'est le cas du calcul rapide), `poids: 0.6` moins souvent (sons, syllabes, rimes, déjà bien maîtrisés).
+
+**Difficulté** : chaque type a 3 niveaux, qui changent tout seuls : 6 bonnes réponses d'affilée ou au moins 80 % sur 10 → niveau supérieur ; moins de 50 % sur 10 → niveau inférieur. Réglages dans `js/config.js`.
+
 **Outils de `js/exercices/outils.js`** :
 
 | Outil                                  | Rôle                                                        |
@@ -112,10 +120,11 @@ npm start    # ouvre l'application sur http://localhost:8080
 | `nombresProches(n)`                    | pièges numériques crédibles (±1, ±2, ±10, chiffres inversés) |
 | `itemsDuNiveau(items, niveau)`         | filtre les items JSON selon leur champ `niveau`             |
 | `illustrerNombres([7, 5], '+')`        | points jusqu'à 20, cubes au-delà                            |
+| `illustrerCalcul(13, '−', 5)`          | visuel d'explication d'une addition ou d'une soustraction   |
 
-**Modes de réponse** (`js/ui/reponses/`) : `choix` (2 à 4 gros boutons), `pave` (pavé numérique, réponse entière).
+**Modes de réponse** (`js/ui/reponses/`) : `choix` (2 à 4 gros boutons), `pave` (pavé numérique, réponse entière), `phrase` (toucher un mot de la phrase : `options` = les mots, `attendu` = le mot à toucher).
 
 **Visuels** (`js/ui/visuels.js`, liste détaillée en haut du fichier) :
-`equation`, `suite`, `mot` (avec `_` pour un trou, `syllabes`, `surligne`), `son`, `ecoute`, `points`, `cubes`, `droite`.
+`equation`, `suite`, `mot` (avec `_` pour un trou, `syllabes`, `surligne`), `phrase` (texte long, `surligne`), `son`, `ecoute`, `points`, `cubes` (aussi `{ dizaines, unites }`), `paquets`, `droite`.
 
-**Texte lu à voix haute** : par défaut la consigne. Ajouter `lecture` pour lire autre chose (le mot à écrire d'une dictée, par exemple). Les signes `+ − = < >` sont lus en toutes lettres automatiquement.
+**Texte lu à voix haute** : par défaut la consigne. Ajouter `lecture` pour lire autre chose (le mot à écrire d'une dictée, par exemple). Les signes `+ − × = < >` sont lus en toutes lettres automatiquement.

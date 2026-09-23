@@ -14,8 +14,9 @@
  */
 import choix from './choix.js';
 import pave from './pave.js';
+import phrase from './phrase.js';
 
-export const MODES = { choix, pave };
+export const MODES = { choix, pave, phrase };
 
 export function estJuste(reponse, valeur) {
   const mode = MODES[reponse.mode];

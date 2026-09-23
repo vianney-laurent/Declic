@@ -8,6 +8,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { TYPES, fichiersDeDonnees } from '../js/exercices/registre.js';
 import { MODES } from '../js/ui/reponses/index.js';
+import { sansPonctuation } from '../js/exercices/francais/trouver-le-verbe.js';
+import { enLettres } from '../js/exercices/francais/nombres-en-lettres.js';
 
 const ESSAIS = 300;
 const MOTS_MAX_CONSIGNE = 8;
@@ -32,6 +34,10 @@ function verifierQuestion(q) {
     assert.ok(options.length >= 2 && options.length <= 4, `2 à 4 options attendues : ${options}`);
     assert.equal(new Set(options).size, options.length, `options en double : ${options}`);
     assert.ok(options.includes(attendu), `la bonne réponse ${attendu} n'est pas dans ${options}`);
+  }
+  if (mode === 'phrase') {
+    const occurrences = options.filter((mot) => mot === attendu).length;
+    assert.equal(occurrences, 1, `le mot à toucher « ${attendu} » doit apparaître une seule fois`);
   }
   if (mode === 'pave') {
     assert.ok(Number.isInteger(attendu) && attendu >= 0 && attendu <= 999, `nombre invalide : ${attendu}`);
@@ -70,6 +76,29 @@ test('lettres-manquantes.json : un seul trou par mot', () => {
   for (const item of donnees['lettres-manquantes']) {
     assert.equal(item.trou.split('_').length, 2, `« ${item.trou} » doit avoir un seul _`);
   }
+});
+
+test('verbes.json : le verbe apparaît une seule fois dans sa phrase', () => {
+  for (const { phrase, verbe } of donnees.verbes) {
+    const trouves = phrase.split(' ').filter((mot) => sansPonctuation(mot) === verbe);
+    assert.equal(trouves.length, 1, `« ${verbe} » dans « ${phrase} »`);
+  }
+});
+
+test('temps.json : temps connu et indice présent dans la phrase', () => {
+  for (const { phrase, temps, indice } of donnees.temps) {
+    assert.ok(['passé', 'présent', 'futur'].includes(temps), `temps inconnu : ${temps}`);
+    assert.ok(phrase.includes(indice), `« ${indice} » absent de « ${phrase} »`);
+  }
+});
+
+test('nombres en lettres', () => {
+  const attendus = {
+    0: 'zéro', 17: 'dix-sept', 21: 'vingt et un', 32: 'trente-deux', 60: 'soixante',
+    70: 'soixante-dix', 71: 'soixante et onze', 77: 'soixante-dix-sept', 80: 'quatre-vingts',
+    81: 'quatre-vingt-un', 90: 'quatre-vingt-dix', 91: 'quatre-vingt-onze', 99: 'quatre-vingt-dix-neuf', 100: 'cent',
+  };
+  for (const [n, lettres] of Object.entries(attendus)) assert.equal(enLettres(Number(n)), lettres);
 });
 
 test('syllabes.json : le découpage recompose le mot', () => {

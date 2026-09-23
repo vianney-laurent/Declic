@@ -44,7 +44,7 @@ export function tauxRecent(id) {
  * @returns {number} le niveau après ajustement
  */
 export function enregistrerReponse(id, { juste, question, valeur }) {
-  const { niveauMax, fenetre, seuilMonter, seuilDescendre } = CONFIG.adaptatif;
+  const { niveauMax, fenetre, seuilMonter, seuilDescendre, monteeRapide } = CONFIG.adaptatif;
   let niveauFinal;
 
   modifierType(id, (type) => {
@@ -63,8 +63,12 @@ export function enregistrerReponse(id, { juste, question, valeur }) {
 
     type.historique = [...type.historique, juste].slice(-fenetre);
 
-    // On ne change de niveau qu'avec assez de réponses pour juger.
-    if (type.historique.length >= fenetre) {
+    // Tout juste depuis le dernier changement de niveau : inutile d'attendre 10 réponses.
+    const sansFaute = type.historique.length >= monteeRapide && type.historique.every(Boolean);
+    if (sansFaute && type.niveau < niveauMax) {
+      changerNiveau(type, type.niveau + 1);
+    } else if (type.historique.length >= fenetre) {
+      // Sinon, on ne change de niveau qu'avec assez de réponses pour juger.
       const taux = type.historique.filter(Boolean).length / type.historique.length;
       if (taux >= seuilMonter && type.niveau < niveauMax) changerNiveau(type, type.niveau + 1);
       else if (taux < seuilDescendre && type.niveau > 1) changerNiveau(type, type.niveau - 1);
