@@ -1,0 +1,17 @@
+[
+  {
+    "niveau": 1,
+    "un": ["chat", "chien", "vélo", "livre", "ballon", "lit", "gâteau", "bateau", "lapin", "crayon"],
+    "une": ["pomme", "fleur", "maison", "voiture", "table", "poule", "chaise", "porte", "banane", "tortue"]
+  },
+  {
+    "niveau": 2,
+    "un": ["arbre", "avion", "oiseau", "escargot", "éléphant", "ours", "stylo", "cahier", "jouet", "château"],
+    "une": ["fourmi", "souris", "dent", "main", "fenêtre", "lune", "étoile", "orange", "école", "poire"]
+  },
+  {
+    "niveau": 3,
+    "un": ["pull", "légume", "insecte", "parapluie", "orage", "hôpital", "crocodile", "squelette", "moustique", "domino"],
+    "une": ["horloge", "image", "histoire", "armoire", "oreille", "girafe", "abeille", "épaule", "écharpe", "allumette"]
+  }
+]

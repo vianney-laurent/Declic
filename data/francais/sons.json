@@ -1,0 +1,34 @@
+[
+  {
+    "son": "ou", "prononcer": "ou", "exemple": "loup", "graphies": ["ou"], "niveau": 1,
+    "mots": ["poule", "roue", "mouton", "hibou", "soupe", "genou", "route", "tour", "cou", "jour", "fourmi", "douche"]
+  },
+  {
+    "son": "on", "prononcer": "on", "exemple": "savon", "graphies": ["on", "om"], "niveau": 1,
+    "mots": ["ballon", "pont", "bonbon", "maison", "crayon", "lion", "cochon", "citron", "rond", "ombre", "melon", "bouton"]
+  },
+  {
+    "son": "ch", "prononcer": "che", "exemple": "chat", "graphies": ["ch"], "niveau": 1,
+    "mots": ["cheval", "vache", "niche", "chaise", "bouche", "mouche", "chemise", "château", "poche", "chocolat", "biche", "chou"]
+  },
+  {
+    "son": "oi", "prononcer": "oua", "exemple": "roi", "graphies": ["oi", "oy"], "niveau": 1,
+    "mots": ["étoile", "poisson", "voiture", "bois", "noix", "moi", "oiseau", "poire", "armoire", "doigt", "toit", "soir"]
+  },
+  {
+    "son": "an", "prononcer": "an", "exemple": "gant", "graphies": ["an", "am", "en", "em"], "niveau": 2,
+    "mots": ["maman", "dent", "enfant", "lampe", "orange", "vent", "banc", "éléphant", "tente", "jambe", "dimanche", "serpent"]
+  },
+  {
+    "son": "in", "prononcer": "hein", "exemple": "lapin", "graphies": ["in", "im", "ain", "ein", "un"], "niveau": 2,
+    "mots": ["sapin", "pain", "main", "train", "jardin", "dauphin", "timbre", "peinture", "coussin", "requin", "raisin", "matin"]
+  },
+  {
+    "son": "eu", "prononcer": "eu", "exemple": "feu", "graphies": ["eu", "œu"], "niveau": 2,
+    "mots": ["jeu", "bleu", "cheveu", "neveu", "deux", "fleur", "heure", "peur", "œuf", "nœud", "beurre", "docteur"]
+  },
+  {
+    "son": "gn", "prononcer": "gne", "exemple": "agneau", "graphies": ["gn"], "niveau": 3,
+    "mots": ["montagne", "peigne", "cygne", "araignée", "champignon", "ligne", "vigne", "poignée", "signe", "baignoire", "gagner", "campagne"]
+  }
+]
