@@ -10,7 +10,7 @@
  *   mot       { texte: 'ch_t', syllabes?: [...], surligne?: 'ou', position?: index }
  *   phrase    { texte: 'Hier, Léo a joué.', surligne?: 'Hier' }  texte plus long, qui revient à la ligne
  *   son       { texte: 'ou' }
- *   ecoute    {}                                          gros bouton pour réécouter
+ *   ecoute    { texte?: 'maison' }                        gros bouton : relit ce texte (ou la consigne)
  *   points    { groupes: [7, { n: 3, style: 'creux' }], separateur?: '+', continu?: true }
  *             styles : 'plein' (défaut), 'creux', 'barre'
  *   cubes     { groupes: [34, 25], separateur?: '+' }     barres de dix + cubes
@@ -23,6 +23,7 @@
  */
 import { h, s } from './dom.js';
 import { icone } from './icones.js';
+import { lire } from './voix.js';
 
 export function dessinerVisuel(spec, contexte = {}) {
   const dessin = DESSINS[spec.type];
@@ -88,8 +89,9 @@ function dessinerSon({ texte }) {
   return h('div', { class: 'son' }, texte);
 }
 
-function dessinerEcoute(_spec, { relire }) {
-  return h('button', { class: 'ecoute', type: 'button', 'aria-label': 'Réécouter', onclick: relire }, icone('hautParleur'));
+function dessinerEcoute({ texte }, { relire }) {
+  const ecouter = texte ? () => lire(texte) : relire;
+  return h('button', { class: 'ecoute', type: 'button', 'aria-label': 'Réécouter', onclick: ecouter }, icone('hautParleur'));
 }
 
 // ─── Dessins SVG ────────────────────────────────────────────────────

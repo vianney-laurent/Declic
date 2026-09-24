@@ -6,6 +6,7 @@ import { CONFIG } from '../config.js';
 import { serieDeJours } from '../moteur/journal.js';
 import { h } from '../ui/dom.js';
 import { icone } from '../ui/icones.js';
+import { typographie } from '../ui/typographie.js';
 import { lire } from '../ui/voix.js';
 
 function ligneBilan(libelle, { justes, total }) {
@@ -21,7 +22,7 @@ export function ecranFin(racine, { session }) {
       h(
         'div',
         { class: 'message' },
-        h('h1', { class: 'message__titre' }, titre),
+        h('h1', { class: 'message__titre' }, typographie(titre)),
         h(
           'div',
           { class: 'bilan' },

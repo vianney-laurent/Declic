@@ -12,6 +12,7 @@
  */
 import { h } from '../ui/dom.js';
 import { icone } from '../ui/icones.js';
+import { typographie } from '../ui/typographie.js';
 import { lire } from '../ui/voix.js';
 
 export function ecranMessage(racine, { titre, texte, lecture, icone: nomIcone, animation, son, actions }) {
@@ -21,8 +22,8 @@ export function ecranMessage(racine, { titre, texte, lecture, icone: nomIcone, a
         'div',
         { class: 'message' },
         nomIcone && h('div', { class: `message__icone ${animation ?? ''}` }, icone(nomIcone)),
-        h('h1', { class: 'message__titre' }, titre),
-        texte && h('p', { class: 'message__texte' }, texte),
+        h('h1', { class: 'message__titre' }, typographie(titre)),
+        texte && h('p', { class: 'message__texte' }, typographie(texte)),
         h(
           'div',
           { class: 'message__actions' },
