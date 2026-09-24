@@ -39,8 +39,8 @@ js/
     donnees.js              chargement des JSON
   ui/                       briques d'affichage
     question.js             affiche une question et gère le retour (juste / explication)
-    reponses/               modes de réponse : choix, pave
-    visuels.js              illustrations SVG : points, cubes, droite graduée…
+    reponses/               modes de réponse : choix, pave, phrase
+    visuels.js              illustrations SVG : points, cubes, paquets, droite graduée…
     voix.js  sons.js        lecture à voix haute, petits sons synthétisés
   ecrans/                   accueil, bloc de questions, messages, fin
 tests/                      tests automatiques (node --test)

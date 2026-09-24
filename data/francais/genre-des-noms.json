@@ -1,0 +1,17 @@
+[
+  {
+    "niveau": 1,
+    "masculin": ["chat", "chien", "vélo", "livre", "ballon", "lit", "gâteau", "bateau", "lapin", "crayon"],
+    "feminin": ["pomme", "fleur", "maison", "voiture", "table", "poule", "chaise", "porte", "banane", "tortue"]
+  },
+  {
+    "niveau": 2,
+    "masculin": ["arbre", "avion", "oiseau", "escargot", "éléphant", "ours", "stylo", "cahier", "jouet", "château"],
+    "feminin": ["fourmi", "souris", "dent", "main", "fenêtre", "lune", "étoile", "orange", "école", "poire"]
+  },
+  {
+    "niveau": 3,
+    "masculin": ["pull", "légume", "insecte", "parapluie", "orage", "hôpital", "crocodile", "squelette", "moustique", "domino"],
+    "feminin": ["horloge", "image", "histoire", "armoire", "oreille", "girafe", "abeille", "épaule", "écharpe", "allumette"]
+  }
+]

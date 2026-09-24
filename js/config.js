@@ -26,6 +26,8 @@ export const CONFIG = {
     fenetre: 10, // on regarde les 10 dernières réponses du type
     seuilMonter: 0.8, // ≥ 80 % → niveau supérieur
     seuilDescendre: 0.5, // < 50 % → niveau inférieur
+    /** Montée rapide : ce nombre de bonnes réponses d'affilée suffit pour monter. */
+    monteeRapide: 6,
     /** Poids en plus pour un type raté à 100 % (1 = revient 2× plus souvent). */
     poidsEchec: 1,
   },

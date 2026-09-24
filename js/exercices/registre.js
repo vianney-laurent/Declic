@@ -11,6 +11,7 @@
  *   matiere: 'maths',            // 'maths' ou 'francais'
  *   titre: 'Additions',          // affiché dans l'espace parent
  *   donnees: 'rimes',            // (facultatif) charge data/francais/rimes.json
+ *   poids: 2,                    // (facultatif) fréquence relative, 1 par défaut
  *   generer({ niveau, donnees }) // niveau = 1, 2 ou 3 → renvoie une question
  * }
  *
@@ -20,12 +21,13 @@
  *   lecture: '…',                      // (facultatif) texte lu à la place de la consigne
  *   visuel: { type: 'points', … },     // (facultatif) voir js/ui/visuels.js
  *   reponse: {
- *     mode: 'choix',                   // 'choix' ou 'pave' (voir js/ui/reponses/)
- *     options: [10, 12, 13],           // pour 'choix' uniquement
+ *     mode: 'choix',                   // 'choix', 'pave' ou 'phrase' (voir js/ui/reponses/)
+ *     options: [10, 12, 13],           // pour 'choix' (réponses) et 'phrase' (mots de la phrase)
  *     attendu: 12,                     // la bonne réponse
  *   },
  *   explication: {                     // montrée après une erreur
  *     texte: '7 + 5 = 12',
+ *     lecture: '…',                    // (facultatif) texte lu à la place
  *     visuel: { … },                   // (facultatif)
  *   },
  *   resume: '7 + 5',                   // identifie la question (répétitions, erreurs fréquentes)
@@ -41,15 +43,22 @@ import denombrer from './maths/denombrer.js';
 import comparer from './maths/comparer.js';
 import suiteLogique from './maths/suite-logique.js';
 import avantApres from './maths/avant-apres.js';
+import calculRapide from './maths/calcul-rapide.js';
+import multiplication from './maths/multiplication.js';
+import dizainesUnites from './maths/dizaines-unites.js';
+import problemes from './maths/problemes.js';
 
 // Français
 import sons from './francais/sons.js';
 import syllabes from './francais/syllabes.js';
 import lettreManquante from './francais/lettre-manquante.js';
 import dictee from './francais/dictee.js';
-import unUne from './francais/un-une.js';
 import singulierPluriel from './francais/singulier-pluriel.js';
 import rimes from './francais/rimes.js';
+import masculinFeminin from './francais/masculin-feminin.js';
+import trouverLeVerbe from './francais/trouver-le-verbe.js';
+import temps from './francais/temps.js';
+import nombresEnLettres from './francais/nombres-en-lettres.js';
 
 export const TYPES = [
   // Maths
@@ -61,14 +70,21 @@ export const TYPES = [
   comparer,
   suiteLogique,
   avantApres,
+  calculRapide,
+  multiplication,
+  dizainesUnites,
+  problemes,
   // Français
   sons,
   syllabes,
   lettreManquante,
   dictee,
-  unUne,
   singulierPluriel,
   rimes,
+  masculinFeminin,
+  trouverLeVerbe,
+  temps,
+  nombresEnLettres,
 ];
 
 export const MATIERES = ['francais', 'maths'];

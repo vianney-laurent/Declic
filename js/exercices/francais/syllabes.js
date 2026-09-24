@@ -13,6 +13,7 @@ export default {
   id: 'syllabes',
   matiere: 'francais',
   titre: 'Compter les syllabes',
+  poids: 0.6, // bien maîtrisé : revient moins souvent
   donnees: 'syllabes',
 
   generer({ niveau, donnees }) {

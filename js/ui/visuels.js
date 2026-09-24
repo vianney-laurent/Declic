@@ -8,11 +8,14 @@
  *   equation  { parties: [7, '+', 5, '=', '?'] }          '?' = case à trouver
  *   suite     { termes: [2, 4, '?'], sauts?: '+2', surligne?: index }
  *   mot       { texte: 'ch_t', syllabes?: [...], surligne?: 'ou', position?: index }
+ *   phrase    { texte: 'Hier, Léo a joué.', surligne?: 'Hier' }  texte plus long, qui revient à la ligne
  *   son       { texte: 'ou' }
  *   ecoute    {}                                          gros bouton pour réécouter
  *   points    { groupes: [7, { n: 3, style: 'creux' }], separateur?: '+', continu?: true }
  *             styles : 'plein' (défaut), 'creux', 'barre'
  *   cubes     { groupes: [34, 25], separateur?: '+' }     barres de dix + cubes
+ *             un groupe peut aussi être { dizaines: 3, unites: 14 } (unités non regroupées)
+ *   paquets   { paquets: 3, taille: 2 }                   3 paquets de 2 points (multiplication)
  *   droite    { debut: 0, fin: 6, etiquettes?: [n…], surligne?: n }
  *
  * Pour ajouter un visuel : écrire une fonction dessinerXxx(spec, contexte)
@@ -75,6 +78,10 @@ function dessinerMot({ texte, syllabes, surligne, position }) {
       : [morceau],
   );
   return h('div', { class: 'mot' }, morceaux);
+}
+
+function dessinerPhrase({ texte, surligne }) {
+  return h('p', { class: 'phrase' }, morceauxSurlignes(texte, surligne));
 }
 
 function dessinerSon({ texte }) {
@@ -159,10 +166,14 @@ function dessinerPoints({ groupes, separateur, continu }) {
 
 const CUBE = 18;
 
-/** Un nombre en barres de dix (dizaines) et cubes isolés (unités). */
-function blocDeCubes(nombre, couleur) {
-  const dizaines = Math.floor(nombre / 10);
-  const unites = nombre % 10;
+/** Uniformise un groupe de cubes : 34 → { dizaines: 3, unites: 4 }. */
+function normaliserCubes(groupe) {
+  if (typeof groupe !== 'number') return groupe;
+  return { dizaines: Math.floor(groupe / 10), unites: groupe % 10 };
+}
+
+/** Des barres de dix (dizaines) et des cubes isolés (unités), rangés par colonnes de 5. */
+function blocDeCubes({ dizaines, unites }, couleur) {
   const ECART = 8;
   const contenu = [];
   let x = 0;
@@ -194,7 +205,36 @@ function blocDeCubes(nombre, couleur) {
 }
 
 function dessinerCubes({ groupes, separateur }) {
-  return aligner(groupes.map((n, i) => blocDeCubes(n, i % 2)), separateur);
+  return aligner(groupes.map((g, i) => blocDeCubes(normaliserCubes(g), i % 2)), separateur);
+}
+
+/** Des paquets identiques (3 paquets de 2), rangés par lignes de 5 paquets. */
+function dessinerPaquets({ paquets, taille }) {
+  const PAR_LIGNE = 5;
+  const colonnesPoints = Math.min(taille, 5);
+  const lignesPoints = Math.ceil(taille / 5);
+  const PAS = 44;
+  const MARGE = 12;
+  const largeurPaquet = colonnesPoints * PAS + 2 * MARGE;
+  const hauteurPaquet = lignesPoints * PAS + 2 * MARGE;
+  const ECART = 20;
+  const contenu = [];
+
+  for (let p = 0; p < paquets; p++) {
+    const x0 = (p % PAR_LIGNE) * (largeurPaquet + ECART);
+    const y0 = Math.floor(p / PAR_LIGNE) * (hauteurPaquet + ECART);
+    contenu.push(s('rect', { x: x0, y: y0, width: largeurPaquet, height: hauteurPaquet, rx: 16, class: 'svg-cadre' }));
+    for (let i = 0; i < taille; i++) {
+      const cx = x0 + MARGE + (i % 5) * PAS + PAS / 2;
+      const cy = y0 + MARGE + Math.floor(i / 5) * PAS + PAS / 2;
+      contenu.push(s('circle', { cx, cy, r: 15, class: `svg-point svg-couleur-${p % 2}` }));
+    }
+  }
+  const colonnes = Math.min(paquets, PAR_LIGNE);
+  const lignes = Math.ceil(paquets / PAR_LIGNE);
+  const largeur = colonnes * largeurPaquet + (colonnes - 1) * ECART;
+  const hauteur = lignes * hauteurPaquet + (lignes - 1) * ECART;
+  return s('svg', { viewBox: `-4 -4 ${largeur + 8} ${hauteur + 8}`, width: largeur + 8, class: 'dessin' }, contenu);
 }
 
 /** Droite graduée avec les nombres sous les graduations. */
@@ -220,9 +260,11 @@ const DESSINS = {
   equation: dessinerEquation,
   suite: dessinerSuite,
   mot: dessinerMot,
+  phrase: dessinerPhrase,
   son: dessinerSon,
   ecoute: dessinerEcoute,
   points: dessinerPoints,
   cubes: dessinerCubes,
+  paquets: dessinerPaquets,
   droite: dessinerDroite,
 };

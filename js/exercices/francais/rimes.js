@@ -9,6 +9,7 @@ export default {
   id: 'rimes',
   matiere: 'francais',
   titre: 'Rimes',
+  poids: 0.6, // bien maîtrisé : revient moins souvent
   donnees: 'rimes',
 
   generer({ niveau, donnees }) {
