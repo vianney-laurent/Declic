@@ -92,6 +92,20 @@ test('temps.json : temps connu et indice présent dans la phrase', () => {
   }
 });
 
+test('comprehension.json : indice présent dans le texte, réponse distincte des pièges', () => {
+  for (const { texte, reponse, pieges, indice } of donnees.comprehension) {
+    assert.ok(texte.includes(indice), `indice « ${indice} » absent du texte`);
+    assert.ok(!pieges.includes(reponse), `la réponse « ${reponse} » est aussi un piège`);
+  }
+});
+
+test('homophones.json : un seul trou, réponse parmi les deux choix', () => {
+  for (const { phrase, reponse, choix } of donnees.homophones) {
+    assert.equal(phrase.split('_').length, 2, `« ${phrase} » doit avoir un seul _`);
+    assert.ok(choix.includes(reponse), `« ${reponse} » absent de ${choix}`);
+  }
+});
+
 test('nombres en lettres', () => {
   const attendus = {
     0: 'zéro', 17: 'dix-sept', 21: 'vingt et un', 32: 'trente-deux', 60: 'soixante',

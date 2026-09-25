@@ -47,6 +47,9 @@ import calculRapide from './maths/calcul-rapide.js';
 import multiplication from './maths/multiplication.js';
 import dizainesUnites from './maths/dizaines-unites.js';
 import problemes from './maths/problemes.js';
+import heure from './maths/heure.js';
+import monnaie from './maths/monnaie.js';
+import droiteGraduee from './maths/droite-graduee.js';
 
 // Français
 import sons from './francais/sons.js';
@@ -59,6 +62,8 @@ import masculinFeminin from './francais/masculin-feminin.js';
 import trouverLeVerbe from './francais/trouver-le-verbe.js';
 import temps from './francais/temps.js';
 import nombresEnLettres from './francais/nombres-en-lettres.js';
+import comprehension from './francais/comprehension.js';
+import homophones from './francais/homophones.js';
 
 export const TYPES = [
   // Maths
@@ -74,6 +79,9 @@ export const TYPES = [
   multiplication,
   dizainesUnites,
   problemes,
+  heure,
+  monnaie,
+  droiteGraduee,
   // Français
   sons,
   syllabes,
@@ -85,6 +93,8 @@ export const TYPES = [
   trouverLeVerbe,
   temps,
   nombresEnLettres,
+  comprehension,
+  homophones,
 ];
 
 export const MATIERES = ['francais', 'maths'];

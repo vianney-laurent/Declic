@@ -36,7 +36,7 @@
   --texte-consigne: 34px;
   --texte-reponse: 44px;
   --texte-grand: clamp(44px, 11vw, 64px);
-  --case-suite: clamp(64px, 17vw, 96px);
+  --case-suite: clamp(56px, 15vw, 96px);
 
   --rayon: 24px;
   --rayon-petit: 16px;
@@ -101,7 +101,7 @@ button {
   flex-direction: column;
   padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
     max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  animation: apparition 320ms var(--transition) both;
+  animation: apparition-sur-place 320ms var(--transition) both;
 }
 
 /* 3. Boutons ------------------------------------------------------------ */
@@ -298,7 +298,8 @@ button {
   max-width: 880px;
   margin: 0 auto;
   padding-bottom: 8px;
-  animation: apparition 320ms var(--transition) both;
+  /* Zoom léger plutôt que glissement : la question ne déborde jamais de l'écran. */
+  animation: apparition-sur-place 320ms var(--transition) both;
 }
 
 .question__consigne {
@@ -392,7 +393,8 @@ button {
 .option {
   min-width: 120px;
   min-height: clamp(72px, 11dvh, 104px);
-  padding: 0 32px;
+  padding: 8px 28px;
+  line-height: 1.15;
   border: 2px solid var(--bord);
   border-radius: var(--rayon);
   background: var(--surface);
@@ -603,11 +605,17 @@ button {
   max-width: 100%;
 }
 
+/* Dans une question, le visuel prend la place laissée par la consigne et les réponses. */
+.question__visuel > .visuel {
+  height: 100%;
+  min-height: 0;
+}
+
 .dessin {
   max-width: 100%;
   height: auto;
-  /* Le dessin cède la place aux réponses sur les écrans peu hauts. */
-  max-height: clamp(80px, calc(100dvh - 560px), 34dvh);
+  /* Le dessin cède la place aux réponses, sans jamais devenir démesuré. */
+  max-height: min(100%, 40dvh);
 }
 
 .case-vide {
@@ -814,6 +822,100 @@ button {
   fill: var(--encre);
 }
 
+.svg-fleche {
+  fill: var(--accent);
+}
+
+/* Horloge : cadran clair, petite aiguille foncée, grande aiguille couleur d'accent. */
+.svg-cadran {
+  fill: var(--surface);
+  stroke: var(--encre);
+  stroke-width: 4;
+}
+
+.svg-repere {
+  stroke: var(--bord);
+  stroke-width: 2;
+}
+
+.svg-repere-heure {
+  stroke: var(--encre-douce);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.svg-chiffre-horloge {
+  font-size: 22px;
+  font-weight: 700;
+  fill: var(--encre);
+}
+
+.svg-aiguille-heures {
+  stroke: var(--encre);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.svg-aiguille-minutes {
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.svg-axe {
+  fill: var(--encre);
+}
+
+/* Monnaie : teintes sobres et neutres, la valeur écrite dessus. */
+.svg-piece {
+  fill: #e9dcc0;
+  stroke: #c9b58c;
+  stroke-width: 2;
+}
+
+.svg-piece--2 {
+  fill: #dfe3e6;
+  stroke: #b9c0c6;
+}
+
+.svg-piece-coeur {
+  fill: none;
+  stroke: rgb(0 0 0 / 0.08);
+  stroke-width: 2;
+}
+
+.svg-billet {
+  fill: #e4ece8;
+  stroke: #b8cbc2;
+  stroke-width: 2;
+}
+
+.svg-billet--10 {
+  fill: #efe4dc;
+  stroke: #d6c0b0;
+}
+
+.svg-billet--20 {
+  fill: #e2e6f0;
+  stroke: #bcc5d8;
+}
+
+.svg-billet-cadre {
+  fill: none;
+  stroke: rgb(0 0 0 / 0.1);
+  stroke-width: 1.5;
+}
+
+.svg-valeur {
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--encre);
+}
+
+.svg-valeur--billet {
+  font-size: 26px;
+}
+
 .svg-surligne {
   fill: var(--accent-doux);
   stroke: var(--accent);
@@ -946,6 +1048,13 @@ button {
 @keyframes fondu {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes apparition-sur-place {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
   }
 }
 
