@@ -1,0 +1,102 @@
+[
+  {
+    "texte": "Léo a un petit chien. Il s'appelle Filou. Filou aime courir dans le jardin.",
+    "question": "Comment s'appelle le chien ?", "reponse": "Filou", "pieges": ["Léo", "Max"],
+    "indice": "Il s'appelle Filou.", "niveau": 1
+  },
+  {
+    "texte": "Jade mange une pomme rouge. Elle est assise sur un banc.",
+    "question": "Que mange Jade ?", "reponse": "une pomme", "pieges": ["une banane", "un gâteau"],
+    "indice": "Jade mange une pomme rouge.", "niveau": 1
+  },
+  {
+    "texte": "Le chat de Tom est tout noir. Il dort sur le lit.",
+    "question": "Où dort le chat ?", "reponse": "sur le lit", "pieges": ["sous la table", "dans le jardin"],
+    "indice": "Il dort sur le lit.", "niveau": 1
+  },
+  {
+    "texte": "Il pleut. Hugo met ses bottes jaunes pour aller à l'école.",
+    "question": "De quelle couleur sont les bottes ?", "reponse": "jaunes", "pieges": ["rouges", "bleues"],
+    "indice": "Hugo met ses bottes jaunes", "niveau": 1
+  },
+  {
+    "texte": "Inès a trois poissons rouges. Elle leur donne à manger le matin.",
+    "question": "Combien de poissons a Inès ?", "reponse": "trois", "pieges": ["deux", "cinq"],
+    "indice": "Inès a trois poissons rouges.", "niveau": 1
+  },
+  {
+    "texte": "Papa prépare une soupe de carottes. Toute la famille la mange ce soir.",
+    "question": "La soupe est aux tomates. Vrai ou faux ?", "reponse": "faux", "pieges": ["vrai"],
+    "indice": "Papa prépare une soupe de carottes.", "niveau": 1
+  },
+  {
+    "texte": "Lina joue au ballon avec son frère. Le ballon roule sous la voiture.",
+    "question": "Où roule le ballon ?", "reponse": "sous la voiture", "pieges": ["dans l'eau", "sur le toit"],
+    "indice": "Le ballon roule sous la voiture.", "niveau": 1
+  },
+  {
+    "texte": "Ce matin, Noé est allé à la boulangerie. Il a acheté deux croissants pour sa maman.",
+    "question": "Qu'a acheté Noé ?", "reponse": "deux croissants", "pieges": ["une baguette", "deux gâteaux"],
+    "indice": "Il a acheté deux croissants", "niveau": 2
+  },
+  {
+    "texte": "Paul a perdu son doudou. Il le cherche partout. Enfin, il le trouve sous son oreiller.",
+    "question": "Où était le doudou ?", "reponse": "sous l'oreiller", "pieges": ["dans le placard", "sous le lit"],
+    "indice": "il le trouve sous son oreiller.", "niveau": 2
+  },
+  {
+    "texte": "Samedi, Léa fête son anniversaire. Elle a sept ans. Ses amis viennent jouer chez elle.",
+    "question": "Quel âge a Léa ?", "reponse": "sept ans", "pieges": ["six ans", "huit ans"],
+    "indice": "Elle a sept ans.", "niveau": 2
+  },
+  {
+    "texte": "Le hérisson se cache sous les feuilles. Il a peur du chien qui aboie.",
+    "question": "Pourquoi le hérisson se cache-t-il ?", "reponse": "il a peur du chien", "pieges": ["il a froid", "il veut dormir"],
+    "indice": "Il a peur du chien qui aboie.", "niveau": 2
+  },
+  {
+    "texte": "Tom et Jade construisent une cabane dans le jardin. Ils utilisent des branches et une vieille couverture.",
+    "question": "Ils construisent une cabane. Vrai ou faux ?", "reponse": "vrai", "pieges": ["faux"],
+    "indice": "Tom et Jade construisent une cabane", "niveau": 2
+  },
+  {
+    "texte": "La maîtresse lit une histoire de dragon. Les enfants écoutent sans faire de bruit.",
+    "question": "Que fait la maîtresse ?", "reponse": "elle lit une histoire", "pieges": ["elle chante", "elle dessine"],
+    "indice": "La maîtresse lit une histoire de dragon.", "niveau": 2
+  },
+  {
+    "texte": "En hiver, Hugo va à la montagne avec ses parents. Il fait de la luge et construit un bonhomme de neige.",
+    "question": "Quand Hugo va-t-il à la montagne ?", "reponse": "en hiver", "pieges": ["en été", "au printemps"],
+    "indice": "En hiver, Hugo va à la montagne", "niveau": 2
+  },
+  {
+    "texte": "Mamie a fait un gâteau au chocolat. Inès en mange deux parts. Son frère n'en mange qu'une, car il n'a plus faim.",
+    "question": "Qui mange le plus de gâteau ?", "reponse": "Inès", "pieges": ["son frère", "Mamie"],
+    "indice": "Inès en mange deux parts.", "niveau": 3
+  },
+  {
+    "texte": "Le réveil n'a pas sonné. Noé se lève en retard. Il s'habille très vite et court jusqu'à l'école.",
+    "question": "Pourquoi Noé est-il en retard ?", "reponse": "le réveil n'a pas sonné", "pieges": ["il était malade", "il a raté le bus"],
+    "indice": "Le réveil n'a pas sonné.", "niveau": 3
+  },
+  {
+    "texte": "Lina plante une graine dans un pot. Elle l'arrose chaque jour. Deux semaines plus tard, une petite fleur apparaît.",
+    "question": "Que fait Lina chaque jour ?", "reponse": "elle arrose la graine", "pieges": ["elle cueille une fleur", "elle achète un pot"],
+    "indice": "Elle l'arrose chaque jour.", "niveau": 3
+  },
+  {
+    "texte": "Paul voulait jouer dehors, mais il pleuvait trop fort. Alors il a fait un puzzle avec sa sœur.",
+    "question": "Paul a joué dehors. Vrai ou faux ?", "reponse": "faux", "pieges": ["vrai"],
+    "indice": "il pleuvait trop fort. Alors il a fait un puzzle", "niveau": 3
+  },
+  {
+    "texte": "Le petit chat a grimpé tout en haut de l'arbre. Il n'ose plus descendre. Les pompiers viennent le chercher avec une grande échelle.",
+    "question": "Qui aide le petit chat ?", "reponse": "les pompiers", "pieges": ["le voisin", "un oiseau"],
+    "indice": "Les pompiers viennent le chercher", "niveau": 3
+  },
+  {
+    "texte": "Jade a oublié son goûter à la maison. Son ami Tom partage sa banane avec elle. Jade est très contente.",
+    "question": "Pourquoi Jade est-elle contente ?", "reponse": "Tom partage son goûter", "pieges": ["elle a une banane", "c'est les vacances"],
+    "indice": "Son ami Tom partage sa banane avec elle.", "niveau": 3
+  }
+]

@@ -10,6 +10,7 @@ import { attendre, h } from './dom.js';
 import { icone } from './icones.js';
 import { MODES, estJuste } from './reponses/index.js';
 import { sons } from './sons.js';
+import { typographie } from './typographie.js';
 import { dessinerVisuel } from './visuels.js';
 import { lire } from './voix.js';
 
@@ -31,7 +32,7 @@ export async function poserQuestion(zone, question, { surReponse } = {}) {
     h(
       'header',
       { class: 'question__consigne' },
-      h('h1', {}, question.consigne),
+      h('h1', {}, typographie(question.consigne)),
       h('button', { class: 'bouton-voix', type: 'button', 'aria-label': 'Écouter la consigne', onclick: relire }, icone('hautParleur')),
     ),
     h('div', { class: 'question__visuel' }, question.visuel && dessinerVisuel(question.visuel, { relire })),
@@ -64,7 +65,7 @@ function montrerExplication(carte, explication) {
     const panneau = h(
       'div',
       { class: 'explication' },
-      h('p', { class: 'explication__texte' }, explication.texte),
+      h('p', { class: 'explication__texte' }, typographie(explication.texte)),
       explication.visuel && dessinerVisuel(explication.visuel, { relire: () => lire(explication.texte) }),
       h('button', { class: 'bouton', type: 'button', onclick: resoudre }, 'Continuer'),
     );

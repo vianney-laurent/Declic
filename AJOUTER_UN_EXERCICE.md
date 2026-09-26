@@ -24,6 +24,8 @@ Les données sont dans `data/francais/`, un fichier par type :
 | `rimes.json`               | ajouter un mot dans une famille, ou une nouvelle famille                  |
 | `verbes.json`              | `{ "phrase": "Le lion rugit.", "verbe": "rugit", "infinitif": "rugir", "niveau": 1 }` |
 | `temps.json`               | `{ "phrase": "Hier, il a plu.", "temps": "passé", "indice": "Hier", "niveau": 1 }` |
+| `comprehension.json`       | `{ "texte": "Léo a un chien. Il s'appelle Filou.", "question": "Comment s'appelle le chien ?", "reponse": "Filou", "pieges": ["Léo", "Max"], "indice": "Il s'appelle Filou.", "niveau": 1 }` |
+| `homophones.json`          | `{ "phrase": "Le ciel _ bleu.", "reponse": "est", "choix": ["et", "est"], "niveau": 1 }` |
 
 Règles simples :
 
@@ -33,6 +35,8 @@ Règles simples :
 - Sons : un mot ne doit pas contenir le son d'une autre liste s'il risque de servir de piège ambigu. Le test vérifie que chaque mot contient bien une écriture de son son.
 - Verbes : une seule forme conjuguée par phrase (pas d'infinitif comme « aime jouer »), et le verbe ne doit apparaître qu'une fois.
 - Temps : `temps` vaut `passé`, `présent` ou `futur` ; `indice` est le passage de la phrase qui aide à trouver (il est surligné dans l'explication).
+- Compréhension : `indice` est la phrase du texte qui contient la réponse (recopiée à l'identique). Pour une question vrai / faux, mettre `"reponse": "vrai"` (ou `"faux"`) et `"pieges": ["faux"]` (ou `["vrai"]`).
+- Homophones : un seul `_` dans la phrase ; `choix` contient les deux mots, dans l'ordre d'affichage.
 
 ---
 
@@ -125,6 +129,6 @@ npm start    # ouvre l'application sur http://localhost:8080
 **Modes de réponse** (`js/ui/reponses/`) : `choix` (2 à 4 gros boutons), `pave` (pavé numérique, réponse entière), `phrase` (toucher un mot de la phrase : `options` = les mots, `attendu` = le mot à toucher).
 
 **Visuels** (`js/ui/visuels.js`, liste détaillée en haut du fichier) :
-`equation`, `suite`, `mot` (avec `_` pour un trou, `syllabes`, `surligne`), `phrase` (texte long, `surligne`), `son`, `ecoute`, `points`, `cubes` (aussi `{ dizaines, unites }`), `paquets`, `droite`.
+`equation`, `suite`, `mot` (avec `_` pour un trou, `syllabes`, `surligne`), `phrase` (texte long, `_`, `surligne`), `son`, `ecoute`, `points`, `cubes` (aussi `{ dizaines, unites }`), `paquets`, `droite` (avec `pas`, `visibles`, `fleche`), `horloge`, `monnaie`.
 
 **Texte lu à voix haute** : par défaut la consigne. Ajouter `lecture` pour lire autre chose (le mot à écrire d'une dictée, par exemple). Les signes `+ − × = < >` sont lus en toutes lettres automatiquement.

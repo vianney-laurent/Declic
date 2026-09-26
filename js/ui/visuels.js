@@ -8,21 +8,27 @@
  *   equation  { parties: [7, '+', 5, '=', '?'] }          '?' = case à trouver
  *   suite     { termes: [2, 4, '?'], sauts?: '+2', surligne?: index }
  *   mot       { texte: 'ch_t', syllabes?: [...], surligne?: 'ou', position?: index }
- *   phrase    { texte: 'Hier, Léo a joué.', surligne?: 'Hier' }  texte plus long, qui revient à la ligne
+ *   phrase    { texte: 'Hier, Léo a joué.', surligne?: 'Hier', position?: index }  texte long, sur plusieurs lignes
+ *             (le caractère _ devient une case vide, comme pour « mot »)
  *   son       { texte: 'ou' }
- *   ecoute    {}                                          gros bouton pour réécouter
+ *   ecoute    { texte?: 'maison' }                        gros bouton : relit ce texte (ou la consigne)
  *   points    { groupes: [7, { n: 3, style: 'creux' }], separateur?: '+', continu?: true }
  *             styles : 'plein' (défaut), 'creux', 'barre'
  *   cubes     { groupes: [34, 25], separateur?: '+' }     barres de dix + cubes
  *             un groupe peut aussi être { dizaines: 3, unites: 14 } (unités non regroupées)
  *   paquets   { paquets: 3, taille: 2 }                   3 paquets de 2 points (multiplication)
- *   droite    { debut: 0, fin: 6, etiquettes?: [n…], surligne?: n }
+ *   droite    { debut: 0, fin: 6, pas?: 1, etiquettes?: [n…], surligne?: n,
+ *               visibles?: [n…], fleche?: n }
+ *             visibles : seuls ces nombres sont écrits (sinon tous) ; fleche : « ? » pointé
+ *   horloge   { heures: 3, minutes: 30 }                  horloge à aiguilles
+ *   monnaie   { valeurs: [2, 1, 10] }                     pièces (1, 2 €) et billets (5, 10, 20 €)
  *
  * Pour ajouter un visuel : écrire une fonction dessinerXxx(spec, contexte)
  * qui renvoie un élément, puis l'ajouter à DESSINS en bas du fichier.
  */
 import { h, s } from './dom.js';
 import { icone } from './icones.js';
+import { lire } from './voix.js';
 
 export function dessinerVisuel(spec, contexte = {}) {
   const dessin = DESSINS[spec.type];
@@ -67,29 +73,33 @@ function morceauxSurlignes(texte, surligne, position) {
   return [texte.slice(0, debut), h('mark', {}, texte.slice(debut, fin)), texte.slice(fin)];
 }
 
-function dessinerMot({ texte, syllabes, surligne, position }) {
-  if (syllabes) {
-    return h('div', { class: 'mot' }, syllabes.map((syl) => h('span', { class: 'syllabe' }, syl)));
-  }
-  // Le caractère _ devient une case vide.
-  const morceaux = morceauxSurlignes(texte, surligne, position).flatMap((morceau) =>
+/** Le caractère _ devient une case vide. */
+function avecCasesVides(morceaux) {
+  return morceaux.flatMap((morceau) =>
     typeof morceau === 'string'
       ? morceau.split('_').flatMap((bout, i) => (i === 0 ? [bout] : [caseVide(), bout]))
       : [morceau],
   );
-  return h('div', { class: 'mot' }, morceaux);
 }
 
-function dessinerPhrase({ texte, surligne }) {
-  return h('p', { class: 'phrase' }, morceauxSurlignes(texte, surligne));
+function dessinerMot({ texte, syllabes, surligne, position }) {
+  if (syllabes) {
+    return h('div', { class: 'mot' }, syllabes.map((syl) => h('span', { class: 'syllabe' }, syl)));
+  }
+  return h('div', { class: 'mot' }, avecCasesVides(morceauxSurlignes(texte, surligne, position)));
+}
+
+function dessinerPhrase({ texte, surligne, position }) {
+  return h('p', { class: 'phrase' }, avecCasesVides(morceauxSurlignes(texte, surligne, position)));
 }
 
 function dessinerSon({ texte }) {
   return h('div', { class: 'son' }, texte);
 }
 
-function dessinerEcoute(_spec, { relire }) {
-  return h('button', { class: 'ecoute', type: 'button', 'aria-label': 'Réécouter', onclick: relire }, icone('hautParleur'));
+function dessinerEcoute({ texte }, { relire }) {
+  const ecouter = texte ? () => lire(texte) : relire;
+  return h('button', { class: 'ecoute', type: 'button', 'aria-label': 'Réécouter', onclick: ecouter }, icone('hautParleur'));
 }
 
 // ─── Dessins SVG ────────────────────────────────────────────────────
@@ -237,23 +247,119 @@ function dessinerPaquets({ paquets, taille }) {
   return s('svg', { viewBox: `-4 -4 ${largeur + 8} ${hauteur + 8}`, width: largeur + 8, class: 'dessin' }, contenu);
 }
 
-/** Droite graduée avec les nombres sous les graduations. */
-function dessinerDroite({ debut, fin, etiquettes = [], surligne }) {
-  const PAS = 64;
-  const largeur = (fin - debut) * PAS;
-  const Y = 30;
+/**
+ * Droite graduée : une graduation tous les « pas », les nombres dessous.
+ * Les graduations sont plus serrées quand il y en a beaucoup, pour garder un dessin lisible.
+ */
+function dessinerDroite({ debut, fin, pas = 1, etiquettes = [], surligne, visibles, fleche }) {
+  const graduations = Math.round((fin - debut) / pas);
+  const ECART = graduations > 10 ? 44 : 64;
+  const largeur = graduations * ECART;
+  const Y = 58; // hauteur de la ligne : la flèche se place au-dessus
   const contenu = [s('line', { x1: -16, y1: Y, x2: largeur + 16, y2: Y, class: 'svg-droite' })];
 
-  for (let n = debut; n <= fin; n++) {
-    const x = (n - debut) * PAS;
-    const important = etiquettes.includes(n);
+  for (let i = 0; i <= graduations; i++) {
+    const n = debut + i * pas;
+    const x = i * ECART;
+    const grande = visibles ? visibles.includes(n) : true;
+    contenu.push(s('line', { x1: x, y1: Y - (grande ? 14 : 9), x2: x, y2: Y + (grande ? 14 : 9), class: 'svg-graduation' }));
     if (n === surligne) contenu.push(s('circle', { cx: x, cy: Y + 44, r: 26, class: 'svg-surligne' }));
-    contenu.push(s('line', { x1: x, y1: Y - 12, x2: x, y2: Y + 12, class: 'svg-graduation' }));
-    contenu.push(
-      s('text', { x, y: Y + 44, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: `svg-nombre ${important ? 'svg-nombre--important' : ''}` }, n),
-    );
+    if (n === fleche) {
+      contenu.push(s('path', { d: `M${x - 12} ${Y - 40} L${x + 12} ${Y - 40} L${x} ${Y - 20} Z`, class: 'svg-fleche' }));
+    }
+    const ecrit = n === fleche ? '?' : visibles && !visibles.includes(n) && n !== surligne ? null : n;
+    if (ecrit === null) continue;
+    const classe = `svg-nombre ${etiquettes.includes(n) || n === fleche ? 'svg-nombre--important' : ''}`;
+    contenu.push(s('text', { x, y: Y + 44, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: classe }, ecrit));
   }
-  return s('svg', { viewBox: `-24 0 ${largeur + 48} 104`, width: largeur + 48, class: 'dessin' }, contenu);
+  return s('svg', { viewBox: `-28 0 ${largeur + 56} 132`, width: largeur + 56, class: 'dessin' }, contenu);
+}
+
+/** Horloge à aiguilles : petite aiguille pour les heures, grande pour les minutes. */
+function dessinerHorloge({ heures, minutes }) {
+  const C = 110; // centre
+  const R = 100; // rayon du cadran
+  const point = (angle, rayon) => {
+    const radians = ((angle - 90) * Math.PI) / 180;
+    return [C + rayon * Math.cos(radians), C + rayon * Math.sin(radians)];
+  };
+  const contenu = [s('circle', { cx: C, cy: C, r: R, class: 'svg-cadran' })];
+
+  for (let i = 0; i < 60; i++) {
+    const heure = i % 5 === 0;
+    const [x1, y1] = point(i * 6, R - (heure ? 14 : 7));
+    const [x2, y2] = point(i * 6, R - 3);
+    contenu.push(s('line', { x1, y1, x2, y2, class: heure ? 'svg-repere-heure' : 'svg-repere' }));
+  }
+  for (let h = 1; h <= 12; h++) {
+    const [x, y] = point(h * 30, R - 26);
+    contenu.push(s('text', { x, y, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: 'svg-chiffre-horloge' }, h));
+  }
+
+  const angleHeures = ((heures % 12) + minutes / 60) * 30;
+  // Aiguilles plus courtes que le cercle des chiffres, pour ne jamais les cacher.
+  const [hx, hy] = point(angleHeures, R * 0.45);
+  const [mx, my] = point(minutes * 6, R - 38);
+  contenu.push(s('line', { x1: C, y1: C, x2: hx, y2: hy, class: 'svg-aiguille-heures' }));
+  contenu.push(s('line', { x1: C, y1: C, x2: mx, y2: my, class: 'svg-aiguille-minutes' }));
+  contenu.push(s('circle', { cx: C, cy: C, r: 7, class: 'svg-axe' }));
+  return s('svg', { viewBox: `0 0 ${2 * C} ${2 * C}`, width: 300, class: 'dessin' }, contenu);
+}
+
+/** Pièces (1 et 2 €) et billets (5, 10, 20 €), alignés et renvoyés à la ligne. */
+function dessinerMonnaie({ valeurs }) {
+  const LARGEUR_MAX = 440;
+  const ECART = 14;
+  const elements = valeurs.map((valeur) => {
+    if (valeur <= 2) {
+      const r = valeur === 2 ? 36 : 32;
+      return {
+        largeur: 2 * r,
+        hauteur: 2 * r,
+        dessin: (x, y) => [
+          s('circle', { cx: x + r, cy: y + r, r, class: `svg-piece svg-piece--${valeur}` }),
+          s('circle', { cx: x + r, cy: y + r, r: r - 9, class: 'svg-piece-coeur' }),
+          s('text', { x: x + r, y: y + r, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: 'svg-valeur' }, `${valeur} €`),
+        ],
+      };
+    }
+    return {
+      largeur: 132,
+      hauteur: 72,
+      dessin: (x, y) => [
+        s('rect', { x, y, width: 132, height: 72, rx: 10, class: `svg-billet svg-billet--${valeur}` }),
+        s('rect', { x: x + 7, y: y + 7, width: 118, height: 58, rx: 6, class: 'svg-billet-cadre' }),
+        s('text', { x: x + 66, y: y + 36, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: 'svg-valeur svg-valeur--billet' }, `${valeur} €`),
+      ],
+    };
+  });
+
+  // Placement en lignes, chaque élément centré verticalement dans sa ligne.
+  const lignes = [[]];
+  let largeurLigne = 0;
+  for (const element of elements) {
+    if (largeurLigne + element.largeur > LARGEUR_MAX && lignes.at(-1).length > 0) {
+      lignes.push([]);
+      largeurLigne = 0;
+    }
+    lignes.at(-1).push(element);
+    largeurLigne += element.largeur + ECART;
+  }
+  const contenu = [];
+  let y = 0;
+  let largeurTotale = 0;
+  for (const ligne of lignes) {
+    const hauteur = Math.max(...ligne.map((e) => e.hauteur));
+    let x = 0;
+    for (const element of ligne) {
+      contenu.push(...element.dessin(x, y + (hauteur - element.hauteur) / 2));
+      x += element.largeur + ECART;
+    }
+    largeurTotale = Math.max(largeurTotale, x - ECART);
+    y += hauteur + ECART;
+  }
+  const hauteurTotale = y - ECART;
+  return s('svg', { viewBox: `-4 -4 ${largeurTotale + 8} ${hauteurTotale + 8}`, width: largeurTotale + 8, class: 'dessin' }, contenu);
 }
 
 const DESSINS = {
@@ -267,4 +373,6 @@ const DESSINS = {
   cubes: dessinerCubes,
   paquets: dessinerPaquets,
   droite: dessinerDroite,
+  horloge: dessinerHorloge,
+  monnaie: dessinerMonnaie,
 };

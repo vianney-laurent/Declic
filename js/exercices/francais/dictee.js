@@ -15,8 +15,8 @@ export default {
     const { mot, pieges } = choisir(itemsDuNiveau(donnees, niveau));
     return {
       consigne: 'Écoute et choisis le bon mot.',
-      lecture: `Choisis le mot : ${mot}. ${mot}.`,
-      visuel: { type: 'ecoute' },
+      lecture: `Écoute et choisis le bon mot. ${mot}.`,
+      visuel: { type: 'ecoute', texte: mot },
       reponse: { mode: 'choix', options: optionsAvec(mot, pieges, 3), attendu: mot },
       explication: {
         texte: `On écrit : ${mot}`,
